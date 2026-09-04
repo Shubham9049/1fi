@@ -1,21 +1,41 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { getProductBySlug } from "../services/productApi";
-import { useNavigate } from "react-router-dom";
+
 const ProductDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedEmi, setSelectedEmi] = useState(null);
+  const [selectedImage, setSelectedImage] = useState("");
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        setLoading(true);
+
         const response = await getProductBySlug(slug);
-        setProduct(response.data);
-        setSelectedVariant(response.data.variants[0]);
+
+        const productData = response.data;
+
+        setProduct(productData);
+
+        // Default variant
+        setSelectedVariant(productData.variants?.[0] || null);
+
+        // Default EMI
+        setSelectedEmi(productData.emiPlans?.[0] || null);
+
+        // Default image
+        setSelectedImage(
+          productData.variants?.[0]?.image || productData.images?.[0] || "",
+        );
       } catch (error) {
         setError(error.message);
       } finally {
@@ -27,100 +47,242 @@ const ProductDetails = () => {
   }, [slug]);
 
   if (loading) {
-    return <h2>Loading product...</h2>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <p className="text-sm text-gray-500">Loading product...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <h2>{error}</h2>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <p className="text-red-500">{error}</p>
+
+          <button
+            onClick={() => navigate(-1)}
+            className="mt-4 rounded-xl bg-black px-5 py-2 text-sm text-white"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (!product) {
-    return <h2>Product not found</h2>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Product not found</p>
+      </div>
+    );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8">
-      <div className="mx-auto max-w-6xl">
-        {/* Back */}
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-6 text-sm font-medium text-gray-600 hover:text-black"
-        >
-          ← Back
-        </button>
+  const discount =
+    product.mrp > product.price
+      ? Math.round(((product.mrp - product.price) / product.mrp) * 100)
+      : 0;
 
-        {/* Product Section */}
-        <div className="grid gap-8 rounded-3xl bg-white p-6 shadow-sm md:grid-cols-2">
-          {/* Left - Image */}
-          <div className="flex min-h-[450px] items-center justify-center rounded-2xl bg-gray-50 p-8">
-            <img
-              src={selectedVariant?.image || product.images[0]}
-              alt={product.name}
-              className="max-h-[400px] w-full object-contain"
-            />
+  const handleVariantChange = (variant) => {
+    setSelectedVariant(variant);
+
+    if (variant.image) {
+      setSelectedImage(variant.image);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-28">
+      {/* Top bar */}
+      <div className="sticky top-0 z-40 border-b border-gray-100 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center px-4 py-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="mr-4 text-xl text-gray-700"
+          >
+            ←
+          </button>
+
+          <h1 className="text-sm font-semibold text-gray-900">
+            Product Details
+          </h1>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 py-5">
+        {/* Main Product */}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* ================= IMAGE SECTION ================= */}
+          <div className="rounded-3xl bg-white p-4 shadow-sm">
+            {/* Main Image */}
+            <div className="flex h-[360px] items-center justify-center rounded-2xl bg-gray-50 p-5 sm:h-[480px]">
+              <img
+                src={selectedImage}
+                alt={product.name}
+                className="h-full w-full object-contain"
+              />
+            </div>
+
+            {/* Thumbnails */}
+            <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+              {product.images?.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(image)}
+                  className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 bg-white p-2 ${
+                    selectedImage === image
+                      ? "border-violet-600"
+                      : "border-gray-100"
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`${product.name} ${index + 1}`}
+                    className="h-full w-full object-contain"
+                  />
+                </button>
+              ))}
+
+              {/* Variant images */}
+              {product.variants?.map((variant, index) => (
+                <button
+                  key={`variant-${index}`}
+                  onClick={() => handleVariantChange(variant)}
+                  className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-xl border-2 bg-white p-2 ${
+                    selectedVariant === variant
+                      ? "border-violet-600"
+                      : "border-gray-100"
+                  }`}
+                >
+                  <img
+                    src={variant.image}
+                    alt={variant.color}
+                    className="h-full w-full object-contain"
+                  />
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Right - Product Info */}
-          <div className="flex flex-col">
-            <p className="mb-2 text-sm font-medium text-gray-500">
-              1Fi Marketplace
-            </p>
+          {/* ================= PRODUCT INFO ================= */}
+          <div className="space-y-5">
+            {/* Basic Information */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <p className="text-xs font-medium text-violet-600">
+                1Fi Marketplace
+              </p>
 
-            <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+              <h2 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
+                {product.name}
+              </h2>
 
-            <p className="mt-3 text-sm leading-6 text-gray-500">
-              {product.description}
-            </p>
-
-            {/* Price */}
-            <div className="mt-6 flex items-center gap-3">
-              <span className="text-3xl font-bold text-gray-900">
-                ₹{product.price}
-              </span>
-
-              {product.mrp > product.price && (
-                <span className="text-lg text-gray-400 line-through">
-                  ₹{product.mrp}
+              {/* Rating */}
+              <div className="mt-3 flex items-center gap-2">
+                <span className="rounded-md bg-green-600 px-2 py-1 text-xs font-semibold text-white">
+                  4.7 ★
                 </span>
+
+                <span className="text-sm text-gray-500">5,033 ratings</span>
+              </div>
+
+              {/* Price */}
+              <div className="mt-5">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="text-3xl font-bold text-gray-900">
+                    ₹{product.price.toLocaleString("en-IN")}
+                  </span>
+
+                  {product.mrp > product.price && (
+                    <>
+                      <span className="text-base text-gray-400 line-through">
+                        ₹{product.mrp.toLocaleString("en-IN")}
+                      </span>
+
+                      <span className="font-semibold text-green-600">
+                        {discount}% off
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                <p className="mt-2 text-xs text-gray-500">
+                  Inclusive of all applicable taxes
+                </p>
+              </div>
+
+              {/* Description */}
+              {product.description && (
+                <p className="mt-5 border-t border-gray-100 pt-5 text-sm leading-6 text-gray-600">
+                  {product.description}
+                </p>
               )}
             </div>
 
-            {/* Variants */}
-            <div className="mt-8">
-              <h2 className="mb-3 text-lg font-semibold">Choose Variant</h2>
+            {/* ================= VARIANTS ================= */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-900">
+                  Select Variant
+                </h3>
 
-              <div className="flex flex-wrap gap-3">
-                {product.variants.map((variant, index) => {
-                  const isSelected =
-                    selectedVariant?.storage === variant.storage &&
-                    selectedVariant?.color === variant.color;
+                {selectedVariant && (
+                  <span className="text-sm text-gray-500">
+                    {selectedVariant.color}
+                  </span>
+                )}
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {product.variants?.map((variant, index) => {
+                  const isSelected = selectedVariant === variant;
 
                   return (
                     <button
                       key={index}
-                      onClick={() => setSelectedVariant(variant)}
-                      className={`rounded-xl border px-4 py-3 text-sm transition ${
+                      onClick={() => handleVariantChange(variant)}
+                      className={`rounded-2xl border p-3 text-left transition ${
                         isSelected
-                          ? "border-black bg-black text-white"
-                          : "border-gray-200 bg-white text-gray-700 hover:border-gray-400"
+                          ? "border-violet-600 bg-violet-50"
+                          : "border-gray-200 bg-white hover:border-gray-400"
                       }`}
                     >
-                      {variant.storage} - {variant.color}
+                      <div className="flex h-20 items-center justify-center">
+                        <img
+                          src={variant.image}
+                          alt={variant.color}
+                          className="h-full w-full object-contain"
+                        />
+                      </div>
+
+                      <p className="mt-2 text-sm font-semibold text-gray-900">
+                        {variant.storage}
+                      </p>
+
+                      <p className="mt-1 text-xs text-gray-500">
+                        {variant.color}
+                      </p>
                     </button>
                   );
                 })}
               </div>
             </div>
 
-            {/* EMI Plans */}
-            <div className="mt-8">
-              <h2 className="mb-3 text-lg font-semibold">Choose EMI Plan</h2>
+            {/* ================= EMI ================= */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Choose EMI Plan
+                </h3>
 
-              <div className="space-y-3">
-                {product.emiPlans.map((plan, index) => {
-                  const isSelected =
-                    selectedEmi?.tenureMonths === plan.tenureMonths &&
-                    selectedEmi?.monthlyAmount === plan.monthlyAmount;
+                <p className="mt-1 text-sm text-gray-500">
+                  Pay for your purchase in easy monthly installments
+                </p>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                {product.emiPlans?.map((plan, index) => {
+                  const isSelected = selectedEmi === plan;
 
                   return (
                     <button
@@ -128,25 +290,37 @@ const ProductDetails = () => {
                       onClick={() => setSelectedEmi(plan)}
                       className={`w-full rounded-2xl border p-4 text-left transition ${
                         isSelected
-                          ? "border-black bg-gray-100"
+                          ? "border-violet-600 bg-violet-50"
                           : "border-gray-200 bg-white hover:border-gray-400"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="font-semibold text-gray-900">
-                            ₹{plan.monthlyAmount}/month
+                          <p className="text-lg font-bold text-gray-900">
+                            ₹{plan.monthlyAmount.toLocaleString("en-IN")}
+                            <span className="text-sm font-normal text-gray-500">
+                              /month
+                            </span>
                           </p>
 
                           <p className="mt-1 text-sm text-gray-500">
-                            {plan.tenureMonths} months · {plan.interestRate}%
-                            interest
+                            {plan.tenureMonths} months
                           </p>
                         </div>
 
+                        {isSelected && (
+                          <span className="rounded-full bg-violet-600 px-3 py-1 text-xs font-semibold text-white">
+                            Selected
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-500">
+                        <span>Interest: {plan.interestRate}%</span>
+
                         {plan.cashback > 0 && (
-                          <span className="text-sm font-medium text-gray-700">
-                            ₹{plan.cashback} cashback
+                          <span className="font-semibold text-green-600">
+                            Cashback ₹{plan.cashback.toLocaleString("en-IN")}
                           </span>
                         )}
                       </div>
@@ -156,11 +330,115 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* CTA */}
-            <button className="mt-8 w-full rounded-2xl bg-black px-6 py-4 font-semibold text-white transition hover:bg-gray-800">
+            {/* ================= OFFER ================= */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Offers & Benefits
+              </h3>
+
+              <div className="mt-4 space-y-3">
+                <div className="rounded-2xl bg-green-50 p-4">
+                  <p className="text-sm font-semibold text-green-700">
+                    🎉 No-cost EMI available
+                  </p>
+
+                  <p className="mt-1 text-xs text-green-600">
+                    Choose an eligible EMI plan and pay comfortably.
+                  </p>
+                </div>
+
+                {selectedEmi?.cashback > 0 && (
+                  <div className="rounded-2xl bg-violet-50 p-4">
+                    <p className="text-sm font-semibold text-violet-700">
+                      💰 Cashback available
+                    </p>
+
+                    <p className="mt-1 text-xs text-violet-600">
+                      Get ₹{selectedEmi.cashback.toLocaleString("en-IN")}{" "}
+                      cashback on the selected EMI plan.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ================= DELIVERY ================= */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Delivery Details
+              </h3>
+
+              <div className="mt-4 rounded-2xl bg-gray-50 p-4">
+                <p className="text-sm font-semibold text-gray-800">
+                  📍 Delivery available
+                </p>
+
+                <p className="mt-1 text-xs text-gray-500">
+                  Enter your delivery location during checkout.
+                </p>
+              </div>
+            </div>
+
+            {/* ================= HIGHLIGHTS ================= */}
+            <div className="rounded-3xl bg-white p-5 shadow-sm">
+              <h3 className="text-lg font-bold text-gray-900">
+                Product Highlights
+              </h3>
+
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="rounded-2xl bg-gray-50 p-4">
+                  <p className="text-xs text-gray-400">Product</p>
+
+                  <p className="mt-1 text-sm font-semibold">{product.name}</p>
+                </div>
+
+                <div className="rounded-2xl bg-gray-50 p-4">
+                  <p className="text-xs text-gray-400">Variant</p>
+
+                  <p className="mt-1 text-sm font-semibold">
+                    {selectedVariant?.storage}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-gray-50 p-4">
+                  <p className="text-xs text-gray-400">EMI</p>
+
+                  <p className="mt-1 text-sm font-semibold">
+                    ₹{selectedEmi?.monthlyAmount?.toLocaleString("en-IN")}
+                    /month
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-gray-50 p-4">
+                  <p className="text-xs text-gray-400">Tenure</p>
+
+                  <p className="mt-1 text-sm font-semibold">
+                    {selectedEmi?.tenureMonths} months
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop CTA */}
+            <button
+              disabled={!selectedVariant || !selectedEmi}
+              className="hidden w-full rounded-2xl bg-violet-600 px-6 py-4 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50 sm:block"
+            >
               Proceed with EMI
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile Sticky CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white p-3 shadow-lg sm:hidden">
+        <div className="mx-auto max-w-md">
+          <button
+            disabled={!selectedVariant || !selectedEmi}
+            className="w-full rounded-2xl bg-violet-600 px-6 py-4 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Proceed with EMI
+          </button>
         </div>
       </div>
     </div>

@@ -15,9 +15,9 @@ const products = [
       "iPhone 17 Pro with a premium design, powerful performance and advanced camera system.",
 
     images: [
-      "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=800&q=80",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/k/s/z/-original-imahft5npvyvjyzz.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/j/x/c/-original-imahft5npy3u7mjx.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/a/m/i/-original-imahft5n8nukhmav.jpeg?q=90",
     ],
 
     variants: [
@@ -25,13 +25,13 @@ const products = [
         storage: "256GB",
         color: "Silver",
         image:
-          "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/b/j/o/-original-imahft5nm9eewyzh.jpeg?q=90",
       },
       {
         storage: "512GB",
-        color: "Silver",
+        color: "Cosmic Orange",
         image:
-          "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/n/v/a/-original-imahft5nxmyqndhf.jpeg?q=90",
       },
     ],
 
@@ -67,9 +67,9 @@ const products = [
       "Samsung Galaxy S24 Ultra with a premium display, powerful processor and advanced camera system.",
 
     images: [
-      "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=800&q=80",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/m/o/t/-original-imahggevtcwq3zj7.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/p/j/n/-original-imahggevhhczwtrt.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/a/i/4/-original-imahggevkfva6jhh.jpeg?q=90",
     ],
 
     variants: [
@@ -77,13 +77,13 @@ const products = [
         storage: "256GB",
         color: "Titanium Black",
         image:
-          "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/y/s/g/-original-imahgfmy2zgqvjmy.jpeg?q=90",
       },
       {
         storage: "512GB",
         color: "Titanium Gray",
         image:
-          "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/j/m/z/-original-imahgfmxumntk7sy.jpeg?q=90",
       },
     ],
 
@@ -110,32 +110,32 @@ const products = [
   },
 
   {
-    name: "OnePlus 13",
-    slug: "oneplus-13",
+    name: "OnePlus N6 5G",
+    slug: "oneplus-n6-5g",
     mrp: 69999,
     price: 64999,
 
     description:
-      "OnePlus 13 with flagship performance, a smooth display and premium design.",
+      "OnePlus N6 5G with flagship performance, a smooth display and premium design.",
 
     images: [
-      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=80",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/d/x/r/n6-5g-n6-oneplus-original-imahzvfj78yecv7k.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/l/z/7/n6-5g-n6-oneplus-original-imahzvfjwggusbmf.jpeg?q=90",
+      "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/l/o/0/n6-5g-n6-oneplus-original-imahzvfjb2q8uz3z.jpeg?q=90",
     ],
 
     variants: [
       {
-        storage: "256GB",
-        color: "Black",
+        storage: "128 GB + 4 GB",
+        color: "Midnight Green",
         image:
-          "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/l/o/0/n6-5g-n6-oneplus-original-imahzvfjb2q8uz3z.jpeg?q=90",
       },
       {
-        storage: "512GB",
-        color: "Blue",
+        storage: "128 GB + 6 GB",
+        color: "Fresh Mint",
         image:
-          "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?auto=format&fit=crop&w=800&q=80",
+          "https://rukminim2.flixcart.com/image/1280/1280/xif0q/mobile/y/i/x/n6-5g-n6-oneplus-original-imahzvfjuqp6kz8y.jpeg?q=90",
       },
     ],
 
