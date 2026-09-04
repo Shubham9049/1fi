@@ -6,6 +6,12 @@ The project is built as part of the 1Fi SDE Intern assignment, focusing on produ
 
 ---
 
+## Live Demo
+
+🔗 **Frontend:** https://1fi-pi.vercel.app
+
+🔗 **Backend API:** https://onefi-aeg8.onrender.com
+
 ## 🚀 Features
 
 ### Shop
