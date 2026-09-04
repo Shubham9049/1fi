@@ -87,12 +87,16 @@ MongoDB
 
 ## Backend Run Command
 
+```text
 npm install
 node src/seed.js
 npm run dev
+```
 
 ## Frontend Run Command
 
+```text
 cd Frontend
 npm install
 npm run dev
+```
