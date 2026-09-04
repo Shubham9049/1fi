@@ -422,6 +422,15 @@ const ProductDetails = () => {
             {/* Desktop CTA */}
             <button
               disabled={!selectedVariant || !selectedEmi}
+              onClick={() =>
+                navigate("/checkout", {
+                  state: {
+                    product,
+                    selectedVariant,
+                    selectedEmi,
+                  },
+                })
+              }
               className="hidden w-full rounded-2xl bg-violet-600 px-6 py-4 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50 sm:block"
             >
               Proceed with EMI
@@ -435,6 +444,15 @@ const ProductDetails = () => {
         <div className="mx-auto w-full max-w-md">
           <button
             disabled={!selectedVariant || !selectedEmi}
+            onClick={() =>
+              navigate("/checkout", {
+                state: {
+                  product,
+                  selectedVariant,
+                  selectedEmi,
+                },
+              })
+            }
             className="w-full rounded-2xl bg-violet-600 px-6 py-4 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Proceed with EMI
