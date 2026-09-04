@@ -93,7 +93,7 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-28">
+    <div className="min-h-screen w-full overflow-x-hidden bg-gray-50 pb-28">
       {/* Top bar */}
       <div className="sticky top-0 z-40 border-b border-gray-100 bg-white">
         <div className="mx-auto flex max-w-6xl items-center px-4 py-4">
@@ -110,22 +110,22 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-4 py-5">
+      <div className="mx-auto w-full max-w-6xl min-w-0 px-4 py-5">
         {/* Main Product */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid w-full min-w-0 grid-cols-1 gap-6 lg:grid-cols-2">
           {/* ================= IMAGE SECTION ================= */}
-          <div className="rounded-3xl bg-white p-4 shadow-sm">
+          <div className="w-full min-w-0 overflow-hidden rounded-3xl bg-white p-4 shadow-sm">
             {/* Main Image */}
             <div className="flex h-[360px] items-center justify-center rounded-2xl bg-gray-50 p-5 sm:h-[480px]">
               <img
                 src={selectedImage}
                 alt={product.name}
-                className="h-full w-full object-contain"
+                className="h-full max-h-full w-full max-w-full object-contain"
               />
             </div>
 
             {/* Thumbnails */}
-            <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+            <div className="mt-4 flex max-w-full gap-3 overflow-x-auto overscroll-x-contain pb-1">
               {product.images?.map((image, index) => (
                 <button
                   key={index}
@@ -166,7 +166,7 @@ const ProductDetails = () => {
           </div>
 
           {/* ================= PRODUCT INFO ================= */}
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-5">
             {/* Basic Information */}
             <div className="rounded-3xl bg-white p-5 shadow-sm">
               <p className="text-xs font-medium text-violet-600">
@@ -431,8 +431,8 @@ const ProductDetails = () => {
       </div>
 
       {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-100 bg-white p-3 shadow-lg sm:hidden">
-        <div className="mx-auto max-w-md">
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-100 bg-white p-3 shadow-lg sm:hidden">
+        <div className="mx-auto w-full max-w-md">
           <button
             disabled={!selectedVariant || !selectedEmi}
             className="w-full rounded-2xl bg-violet-600 px-6 py-4 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-50"
